@@ -61,8 +61,9 @@ public class GA {
      * Best-fitness indivudal generated is kept track throughout and the overall highest-fitness individual is 
      * returned as the optimized solution
      */
-    public ArrayList<ArrayList<Double>> execute(int numIter, String crossOver, String selection, ArrayList<Individual> curGen) {
-        for (int i = 0; i < numIter; i++) {
+    public double[][] execute(int numIter, String crossOver, String selection, ArrayList<Individual> curGen) {
+    	
+    	for (int i = 0; i < numIter; i++) {
 
             if (selection.equals("rs")) {
                 curGen = rankSelection(curGen);
@@ -73,6 +74,7 @@ public class GA {
             }
             if (crossOver.equals("uc")) {
                 curGen = uniformCross(curGen);
+
             } else {
                 curGen = onePointCross(curGen);
             }
@@ -84,11 +86,15 @@ public class GA {
 //            }
    
         }
+
         
-        ArrayList<ArrayList<Double>> new_positions = new ArrayList<ArrayList<Double>>();
+        double[][] new_positions = new double[Main.size][Main.dimensionality];
+
         for (int i = 0; i < Main.size; i++) {
-        	for (int j = 0; j < Main.dimensionality; i++) {
-        	new_positions.get(i).set(j, curGen.get(i).getValueOfVar(j)); 
+        	for (int j = 0; j < Main.dimensionality; j++) {
+            	
+        		double num = curGen.get(5).getValueOfVar(j);
+        		new_positions[i][j]= num; 
         	}
         }
         
@@ -211,6 +217,7 @@ public class GA {
                 }
             }
         }
+
         return bp;
     }
     
@@ -266,10 +273,12 @@ public class GA {
      * When a crossover is performed, it is done twice so that the population size remains constant
      */
     public static ArrayList<Individual> uniformCross(ArrayList<Individual> population) {
-        ArrayList<Individual> newgen = new ArrayList<Individual>();
-        while (population.size() > 1) {
+        
+    	ArrayList<Individual> newgen = new ArrayList<Individual>();
+        while (population.size() > 0) {
             Random r = new Random();
             Individual p1 = population.remove(r.nextInt(population.size()));
+            
             Individual p2 = population.remove(r.nextInt(population.size()));
             if (r.nextDouble() < CROSSOVER_PROB) {
                 for (int i = 0; i < 2; i++) {
@@ -287,6 +296,7 @@ public class GA {
                 newgen.add(p2);
             }
         }
+       
         return newgen;
     }
 

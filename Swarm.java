@@ -22,7 +22,7 @@ public class Swarm {
     private static int COLUMNS;
     public double min;
     public double[] min_pos;
-
+    public static Particle[] swarm;
     /**
      * Initializes an instance of a Swarm object
      *
@@ -60,7 +60,7 @@ public class Swarm {
      * @param iter number of iterations
      * @return the best solution found, the smallest solution found
      */
-    public ArrayList<Individual> execute(int iter, Particle[] swarm) {
+    public ArrayList<Individual> execute(int iter) {
     	double min = Double.MAX_VALUE;
         double[] min_pos = new double[dim];
         double[] bests = new double[iter / 1000]; // best value each 1000 iterations
@@ -132,7 +132,6 @@ public class Swarm {
         	Individual new_ind = new Individual(swarm[i].position, function);
         	pop.add(new_ind);
         }
-        
         return pop;
     }
 
@@ -145,6 +144,10 @@ public class Swarm {
     public static double getRandomDouble(double min, double max) {
         Random rand = new Random();
         return ((rand.nextDouble() * (max - min) + min));
+    }
+    
+    public static Particle getParticle(int i) {
+    	return swarm[i];
     }
 
     /**

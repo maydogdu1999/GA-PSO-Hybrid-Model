@@ -11,45 +11,43 @@ import java.io.*;
  * @author Evan Phillips
  */
 public class Main {
-    static int runGA;
-    static int runPSO;
+    static int runGA = 5;
+    static int runPSO = 5;
 	static String topology = "ra";
 	static String function = "ras";
-	static int size = 49;
+	static int size = 16;
 	static int dimensionality = 30;
 	static double ga_cross_prob = 0.5;
 	static double ga_mut_prob = 0.05;
 	static int iterations = 30;
-	static double shift;
+	static double shift = 0.02;
 	
     public static void main(String[] args) {
-//        if (args.length != 5) {
-//            System.out.println("Usage: java Main topology swarm_size iterations function dimensionality");
-//        }
-//        String topology = args[0];
-//        int swarm_size = Integer.parseInt(args[1]);
-//        int iterations = Integer.parseInt(args[2]);
-//        String function = args[3];
-//        int dimensionality = Integer.parseInt(args[4]);
+
     	
+		Swarm s = new Swarm(topology, size, function, dimensionality);
     	Particle[] init_swarm = Swarm.generate_swarm(function, topology);
-    	System.out.print(init_swarm[5].getBestVal());
-		Swarm s = new Swarm(topology, size, function, dimensionality);    
-		ArrayList<Individual> curPop = s.execute(runPSO, init_swarm);
+    	s.swarm = init_swarm;
+    
+		ArrayList<Individual> curPop = s.execute(runPSO);
+		
     	GA population = new GA(dimensionality, size, function, ga_cross_prob, ga_mut_prob, shift);
     	
-    	ArrayList<ArrayList<Double>> curPositions;
+
+    	double[][] curPositions;
 		
     	for (int i = 0; i < iterations; i++) {
-			
+
     		curPositions = population.execute(runGA, "uc", "bs", curPop);
+    		
 			Particle[] new_pos = new Particle[size];
 			for (int j = 0; j < size; j++) {
 				for (int z = 0; z < dimensionality; z++) {
-					new_pos[j].position[j] = curPositions.get(j).get(z);
+					s.getParticle(j).position[z] = curPositions[j][z];
 				}
 			}
-			curPop = s.execute(runPSO, new_pos);
+			curPop = s.execute(runPSO);
+		
 		}
     		
         

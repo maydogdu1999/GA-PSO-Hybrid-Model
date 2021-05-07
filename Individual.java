@@ -21,7 +21,7 @@ public class Individual {
      * For variable v, gets the value of v, which is stored at v-1 in the variable assignment array
      */
     public double getValueOfVar(int variable) {
-        return variableAssign[variable - 1]; //minus 1 used because min variable is 1, but we want
+        return variableAssign[variable]; //minus 1 used because min variable is 1, but we want
                                              //array to be zero-indexed
     }
 
