@@ -61,26 +61,26 @@ public class Particle {
      */
     public void set_pbest() {
         if (Swarm.function.equals("ros")) {
-            if (Swarm.eval_ros(position) < this.best_val) {
+            if (Main.eval_ros(position) < this.best_val) {
                 for (int i = 0; i < Swarm.dim; i++)
                     pbest[i] = position[i];
-                best_val = Swarm.eval_ros(position);
+                best_val = Main.eval_ros(position);
             }
         }
 
         else if (Swarm.function.equals("ack")) {
-            if (Swarm.eval_ack(position) < this.best_val) {
+            if (Main.eval_ack(position) < this.best_val) {
                 for (int i = 0; i < Swarm.dim; i++)
                     pbest[i] = position[i];
-                best_val = Swarm.eval_ack(position);
+                best_val = Main.eval_ack(position);
             }
         }
 
         else {
-            if (Swarm.eval_ras(position) < this.best_val) {
+            if (Main.eval_ras(position) < this.best_val) {
                 for (int i = 0; i < Swarm.dim; i++)
                     pbest[i] = position[i];
-                best_val = Swarm.eval_ras(position);
+                best_val = Main.eval_ras(position);
             }
         }
 
@@ -97,21 +97,21 @@ public class Particle {
     public void set_gbest() {
         if (Swarm.function.equals("ros")) {
             for (Particle particle : this.neighbors) {
-                if (Swarm.eval_ros(particle.pbest) < Swarm.eval_ros(gbest)) {
+                if (Main.eval_ros(particle.pbest) < Main.eval_ros(gbest)) {
                     for (int i = 0; i < Swarm.dim; i++)
                         gbest[i] = particle.pbest[i];
                 }
             }
         } else if (Swarm.function.equals("ack")) {
             for (Particle particle : this.neighbors) {
-                if (Swarm.eval_ack(particle.pbest) < Swarm.eval_ack(gbest)) {
+                if (Main.eval_ack(particle.pbest) < Main.eval_ack(gbest)) {
                     for (int i = 0; i < Swarm.dim; i++)
                         gbest[i] = particle.pbest[i];
                 }
             }
         } else {
             for (Particle particle : this.neighbors) {
-                if (Swarm.eval_ras(particle.pbest) < Swarm.eval_ras(gbest)) {
+                if (Main.eval_ras(particle.pbest) < Main.eval_ras(gbest)) {
                     for (int i = 0; i < Swarm.dim; i++)
                         gbest[i] = particle.pbest[i];
                 }

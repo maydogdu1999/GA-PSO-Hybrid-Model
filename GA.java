@@ -13,6 +13,8 @@ public class GA {
     private static double CROSSOVER_PROB;
     private static double MUTATION_PROB;
     private static String function;
+    private static double MUTATION_SHIFT;
+
 
     /**
      * Initializes an instance of a GA object
@@ -24,22 +26,15 @@ public class GA {
      * @param MUTATION_PROB For each variable assignment in each individual in each iteration, 
      * the likelihood of a mutation happening that flips the value between 0 and 1
      */
-    public GA(int num_of_variables, int num_of_individuals, ArrayList<Integer> cnf, double CROSSOVER_PROB,
-            double MUTATION_PROB) {
-        this.num_of_variables = num_of_variables;
-        this.num_of_individuals = num_of_individuals;
-        this.cnf = cnf;
-        this.CROSSOVER_PROB = CROSSOVER_PROB;
-        this.MUTATION_PROB = MUTATION_PROB;
-
-    }
+   
     public GA(int num_of_variables, int num_of_individuals, String function, double CROSSOVER_PROB,
-            double MUTATION_PROB) {
+            double MUTATION_PROB, double shift) {
         this.num_of_variables = num_of_variables;
         this.num_of_individuals = num_of_individuals;
         this.function = function;
         this.CROSSOVER_PROB = CROSSOVER_PROB;
         this.MUTATION_PROB = MUTATION_PROB;
+        this.MUTATION_SHIFT = shift;
 
     }
     
@@ -47,16 +42,16 @@ public class GA {
     /**
      * Initializes an individual where each variable assignment is a random number in the set {0,1}
      */
-    public static Individual createIndividual() {
-        Random rn = new Random();
-        int indiv[];
-        indiv = new int[num_of_variables];
-        for (int i = 0; i < num_of_variables; i++) {
-            indiv[i] = rn.nextInt(2);
-        }
-        Individual individual = new Individual(indiv, cnf);
-        return individual;
-    }
+//    public static Individual createIndividual() {
+//        Random rn = new Random();
+//        double indiv[];
+//        indiv = new double[num_of_variables];
+//        for (int i = 0; i < num_of_variables; i++) {
+//            indiv[i] = rn.nextInt(2);
+//        }
+//        Individual individual = new Individual(indiv, function);
+//        return individual;
+//    }
 
     /**
      * Runs the GA algorithm given the number of iterations to execute and the type of crossover and selection algorithms
@@ -66,9 +61,7 @@ public class GA {
      * Best-fitness indivudal generated is kept track throughout and the overall highest-fitness individual is 
      * returned as the optimized solution
      */
-    public Individual execute(int numIter, String crossOver, String selection) {
-        ArrayList<Individual> curGen = createPopulation(num_of_individuals);
-        Individual max_fit = Collections.max(curGen, new IndivComparator());
+    public ArrayList<ArrayList<Double>> execute(int numIter, String crossOver, String selection, ArrayList<Individual> curGen) {
         for (int i = 0; i < numIter; i++) {
 
             if (selection.equals("rs")) {
@@ -83,7 +76,7 @@ public class GA {
             } else {
                 curGen = onePointCross(curGen);
             }
-            curGen = mutation(curGen, MUTATION_PROB);
+            curGen = mutation(curGen, MUTATION_PROB, MUTATION_SHIFT);
 
 //            if (max_fit.getFitnessScore() < Collections.max(curGen, new IndivComparator()).getFitnessScore()) {
 //                max_fit = Collections.max(curGen, new IndivComparator());
@@ -91,20 +84,29 @@ public class GA {
 //            }
    
         }
-        return max_fit;
+        
+        ArrayList<ArrayList<Double>> new_positions = new ArrayList<ArrayList<Double>>();
+        for (int i = 0; i < Main.size; i++) {
+        	for (int j = 0; j < Main.dimensionality; i++) {
+        	new_positions.get(i).set(j, curGen.get(i).getValueOfVar(j)); 
+        	}
+        }
+        
+ 
+        return new_positions;
 
     }
  
     /**
      * Population of given size created where each individual's variable assignments are randomly generated
      */
-    public static ArrayList<Individual> createPopulation(int population_size) {
-        ArrayList<Individual> population = new ArrayList<Individual>();
-        for (int i = 0; i < population_size; i++) {
-            population.add(createIndividual());
-        }
-        return population;
-    }
+//    public static ArrayList<Individual> createPopulation(int population_size) {
+//        ArrayList<Individual> population = new ArrayList<Individual>();
+//        for (int i = 0; i < population_size; i++) {
+//            population.add(createIndividual());
+//        }
+//        return population;
+//    }
 
     /**
      * Selects a breeding pool from a given population where each individual's probability of being chosen is 
@@ -227,8 +229,8 @@ public class GA {
 
             if (rand.nextDouble() < CROSSOVER_PROB) {
 
-                Individual firstChild = new Individual(new int[num_of_variables], cnf);
-                Individual secondChild = new Individual(new int[num_of_variables], cnf);
+                Individual firstChild = new Individual(new double[num_of_variables], function);
+                Individual secondChild = new Individual(new double[num_of_variables], function);
                 int randomIndex = rand.nextInt((num_of_variables - 1)) + 1;
                 // accounting for the valid range of indices, excluding 0 and size
                 for (int i = 0; i < randomIndex; i++) {
@@ -271,14 +273,14 @@ public class GA {
             Individual p2 = population.remove(r.nextInt(population.size()));
             if (r.nextDouble() < CROSSOVER_PROB) {
                 for (int i = 0; i < 2; i++) {
-                    int vars[] = new int[num_of_variables];
+                    double vars[] = new double[num_of_variables];
                     for (int k = 1; k < vars.length; k++) {
                         if (r.nextDouble() < 0.5)
                             vars[k] = p1.getValueOfVar(k);
                         else
                             vars[k] = p2.getValueOfVar(k);
                     }
-                    newgen.add(new Individual(vars, cnf));
+                    newgen.add(new Individual(vars, function));
                 }
             } else {
                 newgen.add(p1);
@@ -305,17 +307,15 @@ public class GA {
      * Goes through population and, with some probability for each variable assignment in each individual, flips 
      * the variable assignment at that slot
      */
-    public static ArrayList<Individual> mutation(ArrayList<Individual> children, double mutation_prob) {
+    public static ArrayList<Individual> mutation(ArrayList<Individual> children, double mutation_prob, double shift) {
         ArrayList<Individual> mutated_children = new ArrayList<Individual>();
         for (Individual child : children) {
             for (int i = 0; i < (child.variableAssign).length; i++) {
                 double rand = Math.random();
                 if (rand <= mutation_prob) {
-                    if (child.variableAssign[i] == 0) {
-                        child.variableAssign[i] = 1;
-                    } else {
-                        child.variableAssign[i] = 0;
-                    }
+                	double random = Math.random();
+                	if (random < 0.5 ) child.variableAssign[i] *= (1 + shift);
+                	else child.variableAssign[i] *= (1 - shift);
                 }
             }
             mutated_children.add(child);

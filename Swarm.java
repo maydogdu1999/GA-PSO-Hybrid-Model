@@ -60,12 +60,13 @@ public class Swarm {
      * @param iter number of iterations
      * @return the best solution found, the smallest solution found
      */
-    public double execute(int iter) {
-        Particle[] swarm = generate_swarm(this.function, this.topology);
-        double min = Double.MAX_VALUE;
+    public ArrayList<Individual> execute(int iter, Particle[] swarm) {
+    	double min = Double.MAX_VALUE;
         double[] min_pos = new double[dim];
         double[] bests = new double[iter / 1000]; // best value each 1000 iterations
         int best_ctr = 0;
+        
+
         for (int i = 0; i < swarm.length; i++)
             swarm[i].set_gbest();
 
@@ -124,8 +125,15 @@ public class Swarm {
         }
         this.min = min;
         this.min_pos = min_pos;
-        bests[best_ctr] = min;
-        return min;
+        //bests[best_ctr] = min;
+        
+        ArrayList<Individual> pop = new ArrayList<Individual>();
+        for (int i = 0; i < Main.size; i++) {
+        	Individual new_ind = new Individual(swarm[i].position, function);
+        	pop.add(new_ind);
+        }
+        
+        return pop;
     }
 
     /**
@@ -326,55 +334,6 @@ public class Swarm {
         }
     }
 
-    // returns the value of the Rosenbrock Function at a given position
-    // minimum is 0.0, which occurs at (1.0,...,1.0)
-    public static double eval_ros(double[] pos) {
-        double sum = 0;
-        boolean overflow = false;
-        for (int d = 0; d < dim - 1; d++) {
-            sum += 100.0 * Math.pow(pos[d + 1] - pos[d] * pos[d], 2.0) + Math.pow(pos[d] - 1.0, 2.0);
-        }
-        return sum;
-    }
-
-    // returns the value of the Ackley Function at a given position
-    // minimum is 0.0, which occurs at (0.0,...,0.0)
-    public static double eval_ack(double[] pos) {
-        double firstSum = 0.0;
-        boolean overflow = false;
-        for (int i = 0; i < dim; i++) {
-            double prev = firstSum;
-            firstSum += pos[i] * pos[i];
-            if ((pos[i] > 0 && firstSum <= prev))
-                overflow = true;
-        }
-
-        double secondSum = 0.0;
-        for (int i = 0; i < dim; i++) {
-            secondSum += Math.cos(2.0 * Math.PI * pos[i]);
-        }
-
-        double part1 = Math.exp(-0.2 * Math.sqrt(firstSum / (double) (dim)));
-        if (firstSum != 0 && part1 == 0)
-            overflow = true;
-        double part2 = Math.exp(secondSum / (double) (dim));
-        if (secondSum != 0 && part2 == 0)
-            overflow = true;
-        if (overflow)
-            return Double.MAX_VALUE;
-        else
-            return -20.0 * part1 - part2 + 20.0 + Math.E;
-    }
-
-    // returns the value of the Rastrigin Function at a given position
-    // minimum is 0.0, which occurs at (0.0,...,0.0)
-    public static double eval_ras(double[] pos) {
-        double sum = 0.0;
-        boolean overflow = false;
-        for (int i = 0; i < dim; i++) {
-            sum += pos[i] * pos[i] - 10.0 * Math.cos(2.0 * Math.PI * pos[i]) + 10.0;
-        }
-        return sum;
-    }
+    
 
 }
