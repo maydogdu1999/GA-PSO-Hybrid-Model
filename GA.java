@@ -12,6 +12,7 @@ public class GA {
     public static ArrayList<Integer> cnf;
     private static double CROSSOVER_PROB;
     private static double MUTATION_PROB;
+    private static String function;
 
     /**
      * Initializes an instance of a GA object
@@ -32,6 +33,16 @@ public class GA {
         this.MUTATION_PROB = MUTATION_PROB;
 
     }
+    public GA(int num_of_variables, int num_of_individuals, String function, double CROSSOVER_PROB,
+            double MUTATION_PROB) {
+        this.num_of_variables = num_of_variables;
+        this.num_of_individuals = num_of_individuals;
+        this.function = function;
+        this.CROSSOVER_PROB = CROSSOVER_PROB;
+        this.MUTATION_PROB = MUTATION_PROB;
+
+    }
+    
 
     /**
      * Initializes an individual where each variable assignment is a random number in the set {0,1}
@@ -74,14 +85,14 @@ public class GA {
             }
             curGen = mutation(curGen, MUTATION_PROB);
 
-            if (max_fit.getFitnessScore() < Collections.max(curGen, new IndivComparator()).getFitnessScore()) {
-                max_fit = Collections.max(curGen, new IndivComparator());
-                Main.setBestIteration(i);
-            }
-        }
-
-        return max_fit;
+//            if (max_fit.getFitnessScore() < Collections.max(curGen, new IndivComparator()).getFitnessScore()) {
+//                max_fit = Collections.max(curGen, new IndivComparator());
+//                Main.setBestIteration(i);
+//            }
    
+        }
+        return max_fit;
+
     }
  
     /**
