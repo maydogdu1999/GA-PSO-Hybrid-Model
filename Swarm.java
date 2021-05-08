@@ -23,6 +23,7 @@ public class Swarm {
     public double min;
     public double[] min_pos;
     public static Particle[] swarm;
+
     /**
      * Initializes an instance of a Swarm object
      *
@@ -61,11 +62,10 @@ public class Swarm {
      * @return the best solution found, the smallest solution found
      */
     public ArrayList<Individual> execute(int iter) {
-    	double min = Double.MAX_VALUE;
+        double min = Double.MAX_VALUE;
         double[] min_pos = new double[dim];
         double[] bests = new double[iter / 1000]; // best value each 1000 iterations
         int best_ctr = 0;
-        
 
         for (int i = 0; i < swarm.length; i++)
             swarm[i].set_gbest();
@@ -125,12 +125,12 @@ public class Swarm {
         }
         this.min = min;
         this.min_pos = min_pos;
-        //bests[best_ctr] = min;
-        
+        // bests[best_ctr] = min;
+
         ArrayList<Individual> pop = new ArrayList<Individual>();
         for (int i = 0; i < Main.size; i++) {
-        	Individual new_ind = new Individual(swarm[i].position, function);
-        	pop.add(new_ind);
+            Individual new_ind = new Individual(swarm[i].position, function);
+            pop.add(new_ind);
         }
         return pop;
     }
@@ -145,9 +145,9 @@ public class Swarm {
         Random rand = new Random();
         return ((rand.nextDouble() * (max - min) + min));
     }
-    
+
     public static Particle getParticle(int i) {
-    	return swarm[i];
+        return swarm[i];
     }
 
     /**
@@ -336,7 +336,5 @@ public class Swarm {
 
         }
     }
-
-    
 
 }

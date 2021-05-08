@@ -15,18 +15,21 @@ public class GA {
     private static String function;
     private static double MUTATION_SHIFT;
 
-
     /**
      * Initializes an instance of a GA object
      *
-     * @param num_of_variables number of variables that appear in the cnf
-     * @param num_of_individuals number of individuals to be generated to make up the population
-     * @param cnf ArrayList representing the cnf clauses to be optimized 
-     * @param CROSSOVER_PROB For each pairing from the breeding pool, the likelihood that a crossover happens
-     * @param MUTATION_PROB For each variable assignment in each individual in each iteration, 
-     * the likelihood of a mutation happening that flips the value between 0 and 1
+     * @param num_of_variables   number of variables that appear in the cnf
+     * @param num_of_individuals number of individuals to be generated to make up
+     *                           the population
+     * @param cnf                ArrayList representing the cnf clauses to be
+     *                           optimized
+     * @param CROSSOVER_PROB     For each pairing from the breeding pool, the
+     *                           likelihood that a crossover happens
+     * @param MUTATION_PROB      For each variable assignment in each individual in
+     *                           each iteration, the likelihood of a mutation
+     *                           happening that flips the value between 0 and 1
      */
-   
+
     public GA(int num_of_variables, int num_of_individuals, String function, double CROSSOVER_PROB,
             double MUTATION_PROB, double shift) {
         this.num_of_variables = num_of_variables;
@@ -37,33 +40,35 @@ public class GA {
         this.MUTATION_SHIFT = shift;
 
     }
-    
 
     /**
-     * Initializes an individual where each variable assignment is a random number in the set {0,1}
+     * Initializes an individual where each variable assignment is a random number
+     * in the set {0,1}
      */
-//    public static Individual createIndividual() {
-//        Random rn = new Random();
-//        double indiv[];
-//        indiv = new double[num_of_variables];
-//        for (int i = 0; i < num_of_variables; i++) {
-//            indiv[i] = rn.nextInt(2);
-//        }
-//        Individual individual = new Individual(indiv, function);
-//        return individual;
-//    }
+    // public static Individual createIndividual() {
+    // Random rn = new Random();
+    // double indiv[];
+    // indiv = new double[num_of_variables];
+    // for (int i = 0; i < num_of_variables; i++) {
+    // indiv[i] = rn.nextInt(2);
+    // }
+    // Individual individual = new Individual(indiv, function);
+    // return individual;
+    // }
 
     /**
-     * Runs the GA algorithm given the number of iterations to execute and the type of crossover and selection algorithms
+     * Runs the GA algorithm given the number of iterations to execute and the type
+     * of crossover and selection algorithms
      *
-     * Generates initial population and selects a breeding pool biased towards higher fitness, then implements a 
-     * crossover, potentially perform mutations, and repeat the process with the newly generated population
-     * Best-fitness indivudal generated is kept track throughout and the overall highest-fitness individual is 
-     * returned as the optimized solution
+     * Generates initial population and selects a breeding pool biased towards
+     * higher fitness, then implements a crossover, potentially perform mutations,
+     * and repeat the process with the newly generated population Best-fitness
+     * indivudal generated is kept track throughout and the overall highest-fitness
+     * individual is returned as the optimized solution
      */
     public double[][] execute(int numIter, String crossOver, String selection, ArrayList<Individual> curGen) {
-    	
-    	for (int i = 0; i < numIter; i++) {
+
+        for (int i = 0; i < numIter; i++) {
 
             if (selection.equals("rs")) {
                 curGen = rankSelection(curGen);
@@ -80,43 +85,43 @@ public class GA {
             }
             curGen = mutation(curGen, MUTATION_PROB, MUTATION_SHIFT);
 
-//            if (max_fit.getFitnessScore() < Collections.max(curGen, new IndivComparator()).getFitnessScore()) {
-//                max_fit = Collections.max(curGen, new IndivComparator());
-//                Main.setBestIteration(i);
-//            }
-   
+            // if (max_fit.getFitnessScore() < Collections.max(curGen, new
+            // IndivComparator()).getFitnessScore()) {
+            // max_fit = Collections.max(curGen, new IndivComparator());
+            // Main.setBestIteration(i);
+            // }
+
         }
 
-        
         double[][] new_positions = new double[Main.size][Main.dimensionality];
 
         for (int i = 0; i < Main.size; i++) {
-        	for (int j = 0; j < Main.dimensionality; j++) {
-            	
-        		double num = curGen.get(5).getValueOfVar(j);
-        		new_positions[i][j]= num; 
-        	}
+            for (int j = 0; j < Main.dimensionality; j++) {
+                double num = curGen.get(5).getValueOfVar(j);
+                new_positions[i][j] = num;
+            }
         }
-        
- 
+
         return new_positions;
 
     }
- 
-    /**
-     * Population of given size created where each individual's variable assignments are randomly generated
-     */
-//    public static ArrayList<Individual> createPopulation(int population_size) {
-//        ArrayList<Individual> population = new ArrayList<Individual>();
-//        for (int i = 0; i < population_size; i++) {
-//            population.add(createIndividual());
-//        }
-//        return population;
-//    }
 
     /**
-     * Selects a breeding pool from a given population where each individual's probability of being chosen is 
-     * their rank divided by the sum of all individual's ranks, where the highest value rank is the best individual
+     * Population of given size created where each individual's variable assignments
+     * are randomly generated
+     */
+    // public static ArrayList<Individual> createPopulation(int population_size) {
+    // ArrayList<Individual> population = new ArrayList<Individual>();
+    // for (int i = 0; i < population_size; i++) {
+    // population.add(createIndividual());
+    // }
+    // return population;
+    // }
+
+    /**
+     * Selects a breeding pool from a given population where each individual's
+     * probability of being chosen is their rank divided by the sum of all
+     * individual's ranks, where the highest value rank is the best individual
      * 
      * Chosen with replacement
      */
@@ -139,31 +144,32 @@ public class GA {
         }
         return selectedPop;
     }
-    
+
     /**
-     * Selects a breeding pool based on a population where each individual's likelihood of being chosen is 
-     * e raised to their rank divided by the sum of this value for all individuals, where the highest rank 
-     * corresponds to the most fit individual
+     * Selects a breeding pool based on a population where each individual's
+     * likelihood of being chosen is e raised to their rank divided by the sum of
+     * this value for all individuals, where the highest rank corresponds to the
+     * most fit individual
      * 
      * Chosen with replacement
      */
     public static ArrayList<Individual> expRankSelection(ArrayList<Individual> population) {
-        ArrayList<Individual> selectedPop = new ArrayList<Individual>(); //will store selected pop.
-        HashMap<Individual, Double> prob = new HashMap<Individual, Double>(); //will store probabilities
+        ArrayList<Individual> selectedPop = new ArrayList<Individual>(); // will store selected pop.
+        HashMap<Individual, Double> prob = new HashMap<Individual, Double>(); // will store probabilities
 
-        Collections.sort(population, new IndivComparator()); //Sort the population
-        double sum = 0.0; //sum of all exponentials
+        Collections.sort(population, new IndivComparator()); // Sort the population
+        double sum = 0.0; // sum of all exponentials
         for (int i = 0; i < population.size(); i++) {
             sum += Math.exp(i + 1);
         }
 
-        for (int i = 0; i < population.size(); i++) { //map individuals to their probabilities
+        for (int i = 0; i < population.size(); i++) { // map individuals to their probabilities
             double indProb = Math.exp(i + 1) / sum;
             prob.put(population.get(i), indProb);
         }
 
         Random rand = new Random();
-        while (selectedPop.size() < population.size()) { //do the selection
+        while (selectedPop.size() < population.size()) { // do the selection
             double r = rand.nextDouble();
             double cumulative = 0.0;
             Iterator<Individual> iter = population.iterator();
@@ -182,14 +188,16 @@ public class GA {
     }
 
     /**
-     * Selects a breeding pool based on a current population, where each individual's likelihood of being chosen
-     * is equal to e raised to the individual's fitness score divided by the sum of this value for all individuals
+     * Selects a breeding pool based on a current population, where each
+     * individual's likelihood of being chosen is equal to e raised to the
+     * individual's fitness score divided by the sum of this value for all
+     * individuals
      * 
      * Chosen with replacement
      */
     public static ArrayList<Individual> boltzmannSelection(ArrayList<Individual> population) {
-        ArrayList<Individual> bp = new ArrayList<Individual>(); //will store selected pop.
-        HashMap<Individual, Double> prob = new HashMap<Individual, Double>(); //for stroing probabilities
+        ArrayList<Individual> bp = new ArrayList<Individual>(); // will store selected pop.
+        HashMap<Individual, Double> prob = new HashMap<Individual, Double>(); // for stroing probabilities
         Iterator<Individual> it = population.iterator();
         double sum = 0.0;
         while (it.hasNext()) {
@@ -199,16 +207,15 @@ public class GA {
         while (itr.hasNext()) {
             Individual i = itr.next();
             double p = Math.exp(i.getFitnessScore()) / sum;
-            prob.put(i, p); //map indiivduals to their probabilities
+            prob.put(i, p); // map indiivduals to their probabilities
         }
 
         Random rand = new Random();
-        while (bp.size() < population.size()) { //Do the selection
+        while (bp.size() < population.size()) { // Do the selection
             double r = rand.nextDouble();
             double probSum = 0.0;
             Iterator<Individual> i = population.iterator();
-            while (i.hasNext())
-            {
+            while (i.hasNext()) {
                 Individual ind = i.next();
                 probSum += prob.get(ind);
                 if (probSum > r || !i.hasNext()) {
@@ -220,14 +227,19 @@ public class GA {
 
         return bp;
     }
-    
+
     /**
-     * Implements crossovers with pairs from the breeding pool with some probability, where a dividing line is 
-     * made at some point in the variable assignments, and the values are swapped across that point
+     * Implements crossovers with pairs from the breeding pool with some
+     * probability, where a dividing line is made at some point in the variable
+     * assignments, and the values are swapped across that point
      */
     public static ArrayList<Individual> onePointCross(ArrayList<Individual> population) {
         ArrayList<Individual> nextPop = new ArrayList<Individual>();
-
+        Random random = new Random();
+        if (population.size() % 2 != 0) { // checks to see if pop size is odd
+            Individual single = population.remove(random.nextInt(population.size()));
+            nextPop.add(single);
+        }
         while (population.size() > 1) {
 
             Random rand = new Random();
@@ -267,18 +279,25 @@ public class GA {
     }
 
     /**
-     * Implements crossovers with pairs of individuals from the breeding pool where for each slot in the variable
-     * assignments, the variable assignment in the child is randomly picked from one of the two parents
+     * Implements crossovers with pairs of individuals from the breeding pool where
+     * for each slot in the variable assignments, the variable assignment in the
+     * child is randomly picked from one of the two parents
      * 
-     * When a crossover is performed, it is done twice so that the population size remains constant
+     * When a crossover is performed, it is done twice so that the population size
+     * remains constant
      */
     public static ArrayList<Individual> uniformCross(ArrayList<Individual> population) {
-        
-    	ArrayList<Individual> newgen = new ArrayList<Individual>();
+
+        ArrayList<Individual> newgen = new ArrayList<Individual>();
+        Random random = new Random();
+        if (population.size() % 2 != 0) { // checks to see if pop size is odd
+            Individual single = population.remove(random.nextInt(population.size()));
+            newgen.add(single);
+        }
         while (population.size() > 0) {
             Random r = new Random();
             Individual p1 = population.remove(r.nextInt(population.size()));
-            
+
             Individual p2 = population.remove(r.nextInt(population.size()));
             if (r.nextDouble() < CROSSOVER_PROB) {
                 for (int i = 0; i < 2; i++) {
@@ -296,15 +315,16 @@ public class GA {
                 newgen.add(p2);
             }
         }
-       
+
         return newgen;
     }
 
     static class IndivComparator implements Comparator<Individual> {
 
         /**
-         * Comparator that compares two individuals based on fitness.  Returns a positive value if o1 has higher
-         * score, negative value is o2 has higher score, and 0 if they are the same
+         * Comparator that compares two individuals based on fitness. Returns a positive
+         * value if o1 has higher score, negative value is o2 has higher score, and 0 if
+         * they are the same
          */
         @Override
         public int compare(Individual o1, Individual o2) {
@@ -314,8 +334,8 @@ public class GA {
     }
 
     /**
-     * Goes through population and, with some probability for each variable assignment in each individual, flips 
-     * the variable assignment at that slot
+     * Goes through population and, with some probability for each variable
+     * assignment in each individual, flips the variable assignment at that slot
      */
     public static ArrayList<Individual> mutation(ArrayList<Individual> children, double mutation_prob, double shift) {
         ArrayList<Individual> mutated_children = new ArrayList<Individual>();
@@ -323,9 +343,11 @@ public class GA {
             for (int i = 0; i < (child.variableAssign).length; i++) {
                 double rand = Math.random();
                 if (rand <= mutation_prob) {
-                	double random = Math.random();
-                	if (random < 0.5 ) child.variableAssign[i] *= (1 + shift);
-                	else child.variableAssign[i] *= (1 - shift);
+                    double random = Math.random();
+                    if (random < 0.5)
+                        child.variableAssign[i] *= (1 + shift);
+                    else
+                        child.variableAssign[i] *= (1 - shift);
                 }
             }
             mutated_children.add(child);
