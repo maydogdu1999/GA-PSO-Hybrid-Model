@@ -253,13 +253,13 @@ public class Swarm {
             }
         } else if (function.equals("zakh")) {
             for (int i = 0; i < swarm_size; i++) {
-                swarm[i] = new Particle(createPosition(2.56, 5.12), createVelocity(-2.0, 4.0));
+                swarm[i] = new Particle(createPosition(5.0, 10.0), createVelocity(-2.0, 4.0));
             }
         }
 
         else { // Styb
             for (int i = 0; i < swarm_size; i++) {
-                swarm[i] = new Particle(createPosition(2.56, 5.12), createVelocity(-2.0, 4.0));
+                swarm[i] = new Particle(createPosition(0.0, 5.0), createVelocity(-2.0, 4.0));
             }
         }
 
