@@ -14,7 +14,7 @@ public class Main {
 	static int runGA = 100; // 100
 	static int runPSO = 5;
 	static String topology = "vn";
-	static String function = "ack";
+	static String function = "styb";
 	static int size = 49;
 	static int dimensionality = 30;
 	static double ga_cross_prob = 0.5; // 0.5
@@ -30,6 +30,7 @@ public class Main {
 		ArrayList<Individual> curPop = s.execute(runPSO);
 		GA population = new GA(dimensionality, size, function, ga_cross_prob, ga_mut_prob, shift);
 		double[][] curPositions;
+		System.out.println("orig " + s.min);
 
 		for (int i = 0; i < iterations; i++) {
 
@@ -43,8 +44,8 @@ public class Main {
 			}
 			curPop = s.execute(runPSO);
 		}
-		// System.out.println((s.getParticle(0).position)[0]);
-		// System.out.println(s.min);
+
+		System.out.println("best " + s.min);
 	}
 
 	// returns the value of the Rosenbrock Function at a given position
@@ -97,22 +98,22 @@ public class Main {
 		}
 		return sum;
 	}
-	
-	public static double eval_zakh(double [] pos) {
-	    double sum = 0.0;
-	    double other_term = 0.0;
-	    for (int i = 0; i < dimensionality; i++) {
-	        sum += Math.pow(pos[i], 2);
-	        other_term += 0.5*(double)(i)*pos[i];
-	    }
-	    return sum + Math.pow(other_term, 2) + Math.pow(other_term, 4);
+
+	public static double eval_zakh(double[] pos) {
+		double sum = 0.0;
+		double other_term = 0.0;
+		for (int i = 0; i < dimensionality; i++) {
+			sum += Math.pow(pos[i], 2);
+			other_term += 0.5 * (double) (i) * pos[i];
+		}
+		return sum + Math.pow(other_term, 2) + Math.pow(other_term, 4);
 	}
-	
-	public static double eval_styb(double [] pos) {
-	    double sum = 0.0;
-	    for(int i = 0; i < dimensionality; i++) {
-	        sum += Math.pow(pos[i], 4) - 16*Math.pow(pos[i], 2) + 5*pos[i];
-	    }
-	    return sum / 2.0;
+
+	public static double eval_styb(double[] pos) {
+		double sum = 0.0;
+		for (int i = 0; i < dimensionality; i++) {
+			sum += Math.pow(pos[i], 4) - 16 * Math.pow(pos[i], 2) + 5 * pos[i];
+		}
+		return sum / 2.0;
 	}
 }

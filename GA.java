@@ -253,19 +253,19 @@ public class GA {
                 int randomIndex = rand.nextInt((num_of_variables - 1)) + 1;
                 // accounting for the valid range of indices, excluding 0 and size
                 for (int i = 0; i < randomIndex; i++) {
-                    firstChild.variableAssign[i] = firstParent.variableAssign[i];
+                    firstChild.position[i] = firstParent.position[i];
                 }
 
                 for (int i = 0; i < randomIndex; i++) {
-                    secondChild.variableAssign[i] = secondParent.variableAssign[i];
+                    secondChild.position[i] = secondParent.position[i];
                 }
 
                 for (int i = randomIndex; i < num_of_variables; i++) {
-                    firstChild.variableAssign[i] = secondParent.variableAssign[i];
+                    firstChild.position[i] = secondParent.position[i];
                 }
 
                 for (int i = randomIndex; i < num_of_variables; i++) {
-                    secondChild.variableAssign[i] = firstParent.variableAssign[i];
+                    secondChild.position[i] = firstParent.position[i];
                 }
 
                 nextPop.add(firstChild);
@@ -340,14 +340,14 @@ public class GA {
     public static ArrayList<Individual> mutation(ArrayList<Individual> children, double mutation_prob, double shift) {
         ArrayList<Individual> mutated_children = new ArrayList<Individual>();
         for (Individual child : children) {
-            for (int i = 0; i < (child.variableAssign).length; i++) {
+            for (int i = 0; i < (child.position).length; i++) {
                 double rand = Math.random();
                 if (rand <= mutation_prob) {
                     double random = Math.random();
                     if (random < 0.5)
-                        child.variableAssign[i] *= (1 + shift);
+                        child.position[i] *= (1 + shift);
                     else
-                        child.variableAssign[i] *= (1 - shift);
+                        child.position[i] *= (1 - shift);
                 }
             }
             mutated_children.add(child);

@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Comparator;
 
 public class Individual {
-    double[] variableAssign; // filled with 0s and 1s
+    double[] position; // filled with 0s and 1s
     double fitnessScore; // number of clauses satisfied
 
     /**
      * Initializes an individual given the cnf caluses and an assignment of
      * boolean(0/1) values to each variable
      */
-    Individual(double[] variableAssign, String function) {
-        this.variableAssign = variableAssign;
+    Individual(double[] position, String function) {
+        this.position = position;
         calAndSetFitness(function);
     }
 
@@ -22,8 +22,8 @@ public class Individual {
      * assignment array
      */
     public double getValueOfVar(int variable) {
-        return variableAssign[variable]; // minus 1 used because min variable is 1, but we want
-                                         // array to be zero-indexed
+        return position[variable]; // minus 1 used because min variable is 1, but we want
+                                   // array to be zero-indexed
     }
 
     /**
@@ -33,10 +33,16 @@ public class Individual {
      */
     public void calAndSetFitness(String function) {
         if (function.equals("ros")) {
-            this.fitnessScore = Main.eval_ros(variableAssign);
-
+            this.fitnessScore = Main.eval_ros(position);
+        } else if (function.equals("ack")) {
+            this.fitnessScore = Main.eval_ack(position);
+        } else if (function.equals("ras")) {
+            this.fitnessScore = Main.eval_ras(position);
+        } else if (function.equals("zakh")) {
+            this.fitnessScore = Main.eval_zakh(position);
+        } else {
+            this.fitnessScore = Main.eval_styb(position);
         }
-
     }
 
     public void setFitness(int fitnessScore) {
@@ -48,12 +54,12 @@ public class Individual {
     }
 
     /**
-     * Formats the printing of an individual's variable assignment
+     * Formats the printing of an individual's position
      */
     public String toString() {
         String finalString = "";
-        for (int i = 0; i < variableAssign.length; i++) {
-            finalString += variableAssign[i] + " ";
+        for (int i = 0; i < position.length; i++) {
+            finalString += position[i] + " ";
 
         }
         return finalString;

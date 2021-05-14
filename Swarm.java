@@ -247,7 +247,17 @@ public class Swarm {
                 swarm[i] = new Particle(createPosition(16.0, 32.0), createVelocity(-2.0, 4.0));
             }
 
-        } else { // Rastrigin
+        } else if (function.equals("ras")) {
+            for (int i = 0; i < swarm_size; i++) {
+                swarm[i] = new Particle(createPosition(2.56, 5.12), createVelocity(-2.0, 4.0));
+            }
+        } else if (function.equals("zakh")) {
+            for (int i = 0; i < swarm_size; i++) {
+                swarm[i] = new Particle(createPosition(2.56, 5.12), createVelocity(-2.0, 4.0));
+            }
+        }
+
+        else { // Styb
             for (int i = 0; i < swarm_size; i++) {
                 swarm[i] = new Particle(createPosition(2.56, 5.12), createVelocity(-2.0, 4.0));
             }

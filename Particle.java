@@ -76,11 +76,27 @@ public class Particle {
             }
         }
 
-        else {
+        else if (Swarm.function.equals("ras")) {
             if (Main.eval_ras(position) < this.best_val) {
                 for (int i = 0; i < Swarm.dim; i++)
                     pbest[i] = position[i];
                 best_val = Main.eval_ras(position);
+            }
+        }
+
+        else if (Swarm.function.equals("zakh")) {
+            if (Main.eval_zakh(position) < this.best_val) {
+                for (int i = 0; i < Swarm.dim; i++)
+                    pbest[i] = position[i];
+                best_val = Main.eval_zakh(position);
+            }
+        }
+
+        else {
+            if (Main.eval_styb(position) < this.best_val) {
+                for (int i = 0; i < Swarm.dim; i++)
+                    pbest[i] = position[i];
+                best_val = Main.eval_styb(position);
             }
         }
 
@@ -109,9 +125,27 @@ public class Particle {
                         gbest[i] = particle.pbest[i];
                 }
             }
-        } else {
+        } else if (Swarm.function.equals("ras")) {
             for (Particle particle : this.neighbors) {
                 if (Main.eval_ras(particle.pbest) < Main.eval_ras(gbest)) {
+                    for (int i = 0; i < Swarm.dim; i++)
+                        gbest[i] = particle.pbest[i];
+                }
+            }
+        }
+
+        else if (Swarm.function.equals("zakh")) {
+            for (Particle particle : this.neighbors) {
+                if (Main.eval_zakh(particle.pbest) < Main.eval_zakh(gbest)) {
+                    for (int i = 0; i < Swarm.dim; i++)
+                        gbest[i] = particle.pbest[i];
+                }
+            }
+        }
+
+        else {
+            for (Particle particle : this.neighbors) {
+                if (Main.eval_styb(particle.pbest) < Main.eval_styb(gbest)) {
                     for (int i = 0; i < Swarm.dim; i++)
                         gbest[i] = particle.pbest[i];
                 }
