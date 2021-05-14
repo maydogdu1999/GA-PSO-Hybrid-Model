@@ -97,4 +97,22 @@ public class Main {
 		}
 		return sum;
 	}
+	
+	public static double eval_zakh(double [] pos) {
+	    double sum = 0.0;
+	    double other_term = 0.0;
+	    for (int i = 0; i < dimensionality; i++) {
+	        sum += Math.pow(pos[i], 2);
+	        other_term += 0.5*(double)(i)*pos[i];
+	    }
+	    return sum + Math.pow(other_term, 2) + Math.pow(other_term, 4);
+	}
+	
+	public static double eval_styb(double [] pos) {
+	    double sum = 0.0;
+	    for(int i = 0; i < dimensionality; i++) {
+	        sum += Math.pow(pos[i], 4) - 16*Math.pow(pos[i], 2) + 5*pos[i];
+	    }
+	    return sum / 2.0;
+	}
 }
