@@ -13,8 +13,8 @@ import java.io.*;
 public class Main {
 	static int runGA = 100; // 100
 	static int runPSO = 5;
-	static String topology = "vn";
-	static String function = "styb";
+	static String topology = "gl";
+	static String function = "ros";
 	static int size = 49;
 	static int dimensionality = 30;
 	static double ga_cross_prob = 0.5; // 0.5
@@ -25,13 +25,12 @@ public class Main {
 	public static void main(String[] args) {
 
 		Swarm s = new Swarm(topology, size, function, dimensionality);
-		Particle[] init_swarm = Swarm.generate_swarm(function, topology);
+		Particle[] init_swarm = Swarm.generate_swarm(function, topology); // intialize swarm
 		s.swarm = init_swarm;
 		ArrayList<Individual> curPop = s.execute(runPSO);
 		GA population = new GA(dimensionality, size, function, ga_cross_prob, ga_mut_prob, shift);
 		double[][] curPositions;
 		System.out.println("orig " + s.min);
-
 		for (int i = 0; i < iterations; i++) {
 
 			curPositions = population.execute(runGA, "uc", "bs", curPop);

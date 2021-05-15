@@ -128,6 +128,7 @@ public class GA {
     public static ArrayList<Individual> rankSelection(ArrayList<Individual> population) {
         ArrayList<Individual> selectedPop = new ArrayList<Individual>();
         Collections.sort(population, new IndivComparator()); // sort fitness scores in order of least fit to most fit
+        Collections.reverse(population);
         // create denominator of each individual's propbability
         double denominator = ((population.size() * (population.size() + 1)) / 2);
         // select individuals randomly with those of higher ranks having greater probs
@@ -156,8 +157,8 @@ public class GA {
     public static ArrayList<Individual> expRankSelection(ArrayList<Individual> population) {
         ArrayList<Individual> selectedPop = new ArrayList<Individual>(); // will store selected pop.
         HashMap<Individual, Double> prob = new HashMap<Individual, Double>(); // will store probabilities
-
         Collections.sort(population, new IndivComparator()); // Sort the population
+        Collections.reverse(population); // lower fitness represents more fit indiv
         double sum = 0.0; // sum of all exponentials
         for (int i = 0; i < population.size(); i++) {
             sum += Math.exp(i + 1);
@@ -197,16 +198,16 @@ public class GA {
      */
     public static ArrayList<Individual> boltzmannSelection(ArrayList<Individual> population) {
         ArrayList<Individual> bp = new ArrayList<Individual>(); // will store selected pop.
-        HashMap<Individual, Double> prob = new HashMap<Individual, Double>(); // for stroing probabilities
+        HashMap<Individual, Double> prob = new HashMap<Individual, Double>(); // for storing probabilities
         Iterator<Individual> it = population.iterator();
         double sum = 0.0;
         while (it.hasNext()) {
-            sum += Math.exp(it.next().getFitnessScore());
+            sum += Math.exp(1 / it.next().getFitnessScore());
         }
         Iterator<Individual> itr = population.iterator();
         while (itr.hasNext()) {
             Individual i = itr.next();
-            double p = Math.exp(i.getFitnessScore()) / sum;
+            double p = Math.exp(1 / i.getFitnessScore()) / sum; // favoring individuals with lower fitness scores
             prob.put(i, p); // map indiivduals to their probabilities
         }
 
@@ -354,4 +355,5 @@ public class GA {
         }
         return mutated_children;
     }
+
 }
