@@ -11,15 +11,15 @@ import java.io.*;
  * @author Evan Phillips
  */
 public class Main {
-	static int runGA = 100; // 100
-	static int runPSO = 5;
+	static int runGA = 50; // 100
+	static int runPSO = 100;
 	static String topology = "vn";
 	static String function = "styb";
 	static int size = 49;
 	static int dimensionality = 30;
 	static double ga_cross_prob = 0.5; // 0.5
-	static double ga_mut_prob = 0.5; // 0.5
-	static int iterations = 1000;
+	static double ga_mut_prob = 0.05; // 0.5
+	static int iterations = 3000;
 	static double shift = 0.5; // 0.5
 
 	public static void main(String[] args) {
@@ -30,12 +30,11 @@ public class Main {
 		ArrayList<Individual> curPop = s.execute(runPSO);
 		GA population = new GA(dimensionality, size, function, ga_cross_prob, ga_mut_prob, shift);
 		double[][] curPositions;
-		System.out.println("orig " + s.min);
-
+		
+		double min_Val = Double.MAX_VALUE; //keep track of min_val
+		double[] min_pos; //keep track of min position
 		for (int i = 0; i < iterations; i++) {
-
 			curPositions = population.execute(runGA, "uc", "bs", curPop);
-
 			Particle[] new_pos = new Particle[size];
 			for (int j = 0; j < size; j++) {
 				for (int z = 0; z < dimensionality; z++) {
@@ -43,9 +42,15 @@ public class Main {
 				}
 			}
 			curPop = s.execute(runPSO);
+			System.out.println(s.min);
+			if (s.min < min_Val) {
+				min_Val = s.min;
+				min_pos = s.min_pos;
+			}
+			
 		}
 
-		System.out.println("best " + s.min);
+		System.out.println(min_Val);
 	}
 
 	// returns the value of the Rosenbrock Function at a given position
@@ -98,7 +103,6 @@ public class Main {
 		}
 		return sum;
 	}
-
 	public static double eval_zakh(double[] pos) {
 		double sum = 0.0;
 		double other_term = 0.0;
