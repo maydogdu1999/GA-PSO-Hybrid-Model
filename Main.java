@@ -11,10 +11,13 @@ import java.io.*;
  * @author Evan Phillips
  */
 public class Main {
+
 	static int runGA = 50; // 100
 	static int runPSO = 100;
 	static String topology = "vn";
 	static String function = "styb";
+
+
 	static int size = 49;
 	static int dimensionality = 30;
 	static double ga_cross_prob = 0.5; // 0.5
@@ -25,14 +28,18 @@ public class Main {
 	public static void main(String[] args) {
 
 		Swarm s = new Swarm(topology, size, function, dimensionality);
-		Particle[] init_swarm = Swarm.generate_swarm(function, topology);
+		Particle[] init_swarm = Swarm.generate_swarm(function, topology); // intialize swarm
 		s.swarm = init_swarm;
 		ArrayList<Individual> curPop = s.execute(runPSO);
 		GA population = new GA(dimensionality, size, function, ga_cross_prob, ga_mut_prob, shift);
 		double[][] curPositions;
+
 		
 		double min_Val = Double.MAX_VALUE; //keep track of min_val
 		double[] min_pos; //keep track of min position
+
+		//System.out.println("orig " + s.min);
+
 		for (int i = 0; i < iterations; i++) {
 			curPositions = population.execute(runGA, "uc", "bs", curPop);
 			Particle[] new_pos = new Particle[size];
@@ -49,7 +56,7 @@ public class Main {
 			}
 			
 		}
-
+		//System.out.println(s.min);
 		System.out.println(min_Val);
 	}
 

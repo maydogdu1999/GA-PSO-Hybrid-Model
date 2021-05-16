@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Comparator;
 
 public class Individual {
-    double[] position; // filled with 0s and 1s
+    double[] position;
     double fitnessScore; // number of clauses satisfied
 
     /**
