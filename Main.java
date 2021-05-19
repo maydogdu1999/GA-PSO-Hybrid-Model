@@ -22,7 +22,7 @@ public class Main {
     static int dimensionality = 30;
     static double ga_cross_prob = 0.7; 
     static double ga_mut_prob = 0.3; 
-    static int iterations = 3000;
+    static int iterations = 100;
     static double shift = 0.3; 
 
     public static void main(String[] args) {
@@ -30,28 +30,38 @@ public class Main {
             System.out.println("Usage: java Main <function>");
         else
         {
-                Main.function = args[0];
-            	Swarm s = new Swarm(topology, size, function, dimensionality);
-		Particle[] init_swarm = Swarm.generate_swarm(function, topology); // intialize swarm
-		s.swarm = init_swarm;
-		ArrayList<Individual> curPop = s.execute(runPSO);
+        Main.function = args[0];
+    
+        Swarm s = new Swarm(topology, size, function, dimensionality); // intialize swarm
+		Particle[] init_swarm = Swarm.generate_swarm(function, topology); //initialize random particles
+		s.swarm = init_swarm; // make the random particles the particles of the initialized swarm
+		ArrayList<Individual> curPop = s.execute(runPSO); //execute PSO for runPSO times
+		
 		GA population = new GA(dimensionality, size, function, ga_cross_prob, ga_mut_prob, shift);
-		double[][] curPositions;
+		// initialize a GA population
+		double[][] curPositions; // initialize position vectors to be used
 
 		
 		double min_Val = Double.MAX_VALUE; //keep track of min_val
 		double[] min_pos; //keep track of min position
 
-
+		
+		// start the loop
 		for (int i = 0; i < iterations; i++) {
-			curPositions = population.execute(runGA, "uc", selection, curPop);
-			Particle[] new_pos = new Particle[size];
+			// execute GA
+			curPositions = population.execute(runGA, "uc", selection, curPop); 
+			
+			//using the curPositions, update particles to be handed in to PSO
 			for (int j = 0; j < size; j++) {
 				for (int z = 0; z < dimensionality; z++) {
 					s.getParticle(j).position[z] = curPositions[j][z];
 				}
 			}
-			 curPop = s.execute(runPSO);
+			
+			//execute PSO (now the particles' positions have been updated above)
+			curPop = s.execute(runPSO);
+			
+			//keep track of best position and best evaluation
 			if (s.min < min_Val) {
 				min_Val = s.min;
 				min_pos = s.min_pos;
@@ -112,6 +122,8 @@ public class Main {
         }
         return sum;
     }
+    // returns the value of the Zakharov Function at a given position
+    // minimum is 0.0, which occurs at (0.0,...,0.0)
     public static double eval_zakh(double[] pos) {
         double sum = 0.0;
         double other_term = 0.0;
@@ -121,7 +133,8 @@ public class Main {
         }
         return sum + Math.pow(other_term, 2) + Math.pow(other_term, 4);
     }
-
+    // returns the value of the Styblinski-Tang Function at a given position
+    // minimum is 1174.9797 for dimension=30, which occurs at(2.903534, 2.903534, ..., 2.903534).
     public static double eval_styb(double[] pos) {
         double sum = 0.0;
         for (int i = 0; i < dimensionality; i++) {

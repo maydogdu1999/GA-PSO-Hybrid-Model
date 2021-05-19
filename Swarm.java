@@ -59,7 +59,8 @@ public class Swarm {
      * updated.
      * 
      * @param iter number of iterations
-     * @return the best solution found, the smallest solution found
+     * @return ArrayList<Individual> : creates Individuals using all the positions 
+     * and returns them to be used by the GA 
      */
     public ArrayList<Individual> execute(int iter) {
         double min = Double.MAX_VALUE;

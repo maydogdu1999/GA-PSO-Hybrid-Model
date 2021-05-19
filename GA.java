@@ -18,16 +18,17 @@ public class GA {
     /**
      * Initializes an instance of a GA object
      *
-     * @param num_of_variables   number of variables that appear in the cnf
+     * @param num_of_variables   number of variables that appear in an individual
      * @param num_of_individuals number of individuals to be generated to make up
      *                           the population
-     * @param cnf                ArrayList representing the cnf clauses to be
-     *                           optimized
+     * @param function           a string for the function name
      * @param CROSSOVER_PROB     For each pairing from the breeding pool, the
      *                           likelihood that a crossover happens
      * @param MUTATION_PROB      For each variable assignment in each individual in
      *                           each iteration, the likelihood of a mutation
      *                           happening that flips the value between 0 and 1
+     * @param shift				 a double representing the percentage by which a
+     *                           variable in an invidiudal will increased or decreased                          
      */
 
     public GA(int num_of_variables, int num_of_individuals, String function, double CROSSOVER_PROB,
@@ -48,8 +49,9 @@ public class GA {
      * Generates initial population and selects a breeding pool biased towards
      * higher fitness, then implements a crossover, potentially perform mutations,
      * and repeat the process with the newly generated population Best-fitness
-     * indivudal generated is kept track throughout and the overall highest-fitness
-     * individual is returned as the optimized solution
+     * indivudal generated is kept track throughout and the positions of the final
+     * individuals are returned as double[][] to be handed in to the PSO.
+     * 
      */
     public double[][] execute(int numIter, String crossOver, String selection, ArrayList<Individual> curGen) {
 
