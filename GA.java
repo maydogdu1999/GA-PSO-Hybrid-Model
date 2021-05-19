@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class GA {
 
-    public static int num_of_variables;
+    public static int num_of_positions;
     public static int num_of_individuals;
     public static ArrayList<Integer> cnf;
     private static double CROSSOVER_PROB;
@@ -18,7 +18,8 @@ public class GA {
     /**
      * Initializes an instance of a GA object
      *
-     * @param num_of_variables   number of variables that appear in an individual
+     * @param num_of_positions   number of positions that appear in an individual's
+     *                           position vector
      * @param num_of_individuals number of individuals to be generated to make up
      *                           the population
      * @param function           a string for the function name
@@ -27,13 +28,14 @@ public class GA {
      * @param MUTATION_PROB      For each variable assignment in each individual in
      *                           each iteration, the likelihood of a mutation
      *                           happening that flips the value between 0 and 1
-     * @param shift				 a double representing the percentage by which a
-     *                           variable in an invidiudal will increased or decreased                          
+     * @param shift              a double representing the percentage by which a
+     *                           variable in an invidiudal will increased or
+     *                           decreased
      */
 
-    public GA(int num_of_variables, int num_of_individuals, String function, double CROSSOVER_PROB,
+    public GA(int num_of_positions, int num_of_individuals, String function, double CROSSOVER_PROB,
             double MUTATION_PROB, double shift) {
-        this.num_of_variables = num_of_variables;
+        this.num_of_positions = num_of_positions;
         this.num_of_individuals = num_of_individuals;
         this.function = function;
         this.CROSSOVER_PROB = CROSSOVER_PROB;
@@ -218,9 +220,9 @@ public class GA {
 
             if (rand.nextDouble() < CROSSOVER_PROB) {
 
-                Individual firstChild = new Individual(new double[num_of_variables], function);
-                Individual secondChild = new Individual(new double[num_of_variables], function);
-                int randomIndex = rand.nextInt((num_of_variables - 1)) + 1;
+                Individual firstChild = new Individual(new double[num_of_positions], function);
+                Individual secondChild = new Individual(new double[num_of_positions], function);
+                int randomIndex = rand.nextInt((num_of_positions - 1)) + 1;
                 // accounting for the valid range of indices, excluding 0 and size
                 for (int i = 0; i < randomIndex; i++) {
                     firstChild.position[i] = firstParent.position[i];
@@ -230,11 +232,11 @@ public class GA {
                     secondChild.position[i] = secondParent.position[i];
                 }
 
-                for (int i = randomIndex; i < num_of_variables; i++) {
+                for (int i = randomIndex; i < num_of_positions; i++) {
                     firstChild.position[i] = secondParent.position[i];
                 }
 
-                for (int i = randomIndex; i < num_of_variables; i++) {
+                for (int i = randomIndex; i < num_of_positions; i++) {
                     secondChild.position[i] = firstParent.position[i];
                 }
 
@@ -271,7 +273,7 @@ public class GA {
             Individual p2 = population.remove(r.nextInt(population.size()));
             if (r.nextDouble() < CROSSOVER_PROB) {
                 for (int i = 0; i < 2; i++) {
-                    double vars[] = new double[num_of_variables];
+                    double vars[] = new double[num_of_positions];
                     for (int k = 1; k < vars.length; k++) {
                         if (r.nextDouble() < 0.5)
                             vars[k] = p1.getValueOfVar(k);
