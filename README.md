@@ -3,7 +3,7 @@
 javac Main.java to compile
 
 to run:
-java Main <function>
+java Main function
 
 where function can be:
 ack - Ackley
