@@ -42,21 +42,6 @@ public class GA {
     }
 
     /**
-     * Initializes an individual where each variable assignment is a random number
-     * in the set {0,1}
-     */
-    // public static Individual createIndividual() {
-    // Random rn = new Random();
-    // double indiv[];
-    // indiv = new double[num_of_variables];
-    // for (int i = 0; i < num_of_variables; i++) {
-    // indiv[i] = rn.nextInt(2);
-    // }
-    // Individual individual = new Individual(indiv, function);
-    // return individual;
-    // }
-
-    /**
      * Runs the GA algorithm given the number of iterations to execute and the type
      * of crossover and selection algorithms
      *
@@ -85,12 +70,6 @@ public class GA {
             }
             curGen = mutation(curGen, MUTATION_PROB, MUTATION_SHIFT);
 
-            // if (max_fit.getFitnessScore() < Collections.max(curGen, new
-            // IndivComparator()).getFitnessScore()) {
-            // max_fit = Collections.max(curGen, new IndivComparator());
-            // Main.setBestIteration(i);
-            // }
-
         }
 
         double[][] new_positions = new double[Main.size][Main.dimensionality];
@@ -105,18 +84,6 @@ public class GA {
         return new_positions;
 
     }
-
-    /**
-     * Population of given size created where each individual's variable assignments
-     * are randomly generated
-     */
-    // public static ArrayList<Individual> createPopulation(int population_size) {
-    // ArrayList<Individual> population = new ArrayList<Individual>();
-    // for (int i = 0; i < population_size; i++) {
-    // population.add(createIndividual());
-    // }
-    // return population;
-    // }
 
     /**
      * Selects a breeding pool from a given population where each individual's
